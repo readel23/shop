@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин - Каталог</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div id="catalog-view">
+            <header>
+                <div class="brand">
+                    <div class="logo">M</div>
+                    <div class="brand-info">
+                        <h1>Магазин</h1>
+                        <p>Онлайн каталог</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Поиск продуктов...">
+                    <button id="clear-search" class="icon-btn" aria-label="Очистить поиск">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters-scroll">
+                <button class="filter-chip active" data-sort="default">Все</button>
+                <button class="filter-chip" data-sort="category-moloko">Молочное</button>
+                <button class="filter-chip" data-sort="category-bread">Выпечка</button>
+                <button class="filter-chip" data-sort="price-asc">Дешевле</button>
+            </div>
+
+            <main id="products-container" class="products-grid">
+                </main>
+        </div>
+
+        <div id="cart-view" class="hidden">
+            <header>
+                <div class="brand">
+                    <div class="logo cart-logo"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="brand-info">
+                        <h1>Ваша корзина</h1>
+                        <p>Проверьте заказ</p>
+                    </div>
+                </div>
+            </header>
+
+            <div id="cart-items-container" class="cart-list"></div>
+
+            <div class="cart-summary">
+                <div class="total-row">
+                    <span>Итого:</span>
+                    <span id="cart-total-price">0 ₸</span>
+                </div>
+                
+                <button class="whatsapp-btn" onclick="sendToWhatsapp()">
+                    <i class="fab fa-whatsapp"></i> Отправить в WhatsApp
+                </button>
+                
+                <p class="hint-text">Менеджер свяжется с вами для подтверждения.</p>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" id="tab-catalog" onclick="switchTab('catalog')">
+            <i class="fas fa-home"></i>
+            <span>Каталог</span>
+        </a>
+        <a href="#" class="nav-item relative" id="tab-cart" onclick="switchTab('cart')">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-badge" class="badge hidden">0</span>
+            <span>Корзина</span>
+        </a>
+    </nav>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
