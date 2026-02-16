@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин - Каталог</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="img/logo.png">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div id="catalog-view">
+            <header>
+                <div class="brand">
+                    <div class="logo">
+                        <img src="img/logo.png" alt="Логотип">
+                    </div>
+                    <div class="brand-info">
+                        <h1>Доставка продуктов</h1>
+                        <p>Онлайн каталог</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Поиск продуктов...">
+                    <button id="clear-search" class="icon-btn" aria-label="Очистить поиск">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters-container">
+                <div class="filter-controls">
+                    <button id="filter-toggle-btn" onclick="toggleFilterMenu()">
+                        <i class="fas fa-filter"></i> 
+                        <span id="current-filter-name">Фильтры</span>
+                        <i class="fas fa-chevron-down" id="filter-arrow"></i>
+                    </button>
+
+                    <button id="filter-reset-btn" class="hidden" onclick="resetFilters()" aria-label="Сбросить фильтры">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div id="filter-dropdown" class="filter-dropdown hidden">
+                    </div>
+            </div>
+
+            <main id="products-container" class="products-grid">
+                </main>
+        </div>
+
+        <div id="cart-view" class="hidden">
+            <header>
+                <div class="brand">
+                    <div class="logo cart-logo"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="brand-info">
+                        <h1>Ваша корзина</h1>
+                        <p>Проверьте заказ</p>
+                    </div>
+                </div>
+            </header>
+
+            <div id="cart-items-container" class="cart-list"></div>
+
+            <div class="cart-summary">
+                <div class="total-row">
+                    <span>Итого:</span>
+                    <span id="cart-total-price">0 ₸</span>
+                </div>
+
+                <div class="address-wrapper">
+                    <label for="delivery-address">Адрес доставки:</label>
+                    <input type="text" id="delivery-address" placeholder="Улица, дом, квартира" oninput="checkOrderButton()">
+                </div>
+                
+                <button id="order-btn" class="whatsapp-btn" onclick="sendToWhatsapp()" disabled>
+                    <i class="fab fa-whatsapp"></i> Отправить в WhatsApp
+                </button>
+    
+                <p class="hint-text">Менеджер свяжется с вами для подтверждения.</p>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" id="tab-catalog" onclick="switchTab('catalog')">
+            <i class="fas fa-home"></i>
+            <span>Каталог</span>
+        </a>
+        <a href="#" class="nav-item relative" id="tab-cart" onclick="switchTab('cart')">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-badge" class="badge hidden">0</span>
+            <span>Корзина</span>
+        </a>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
