@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartIcon();
 });
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log("Service Worker зарегистрирован"))
+    .catch((err) => console.log("Ошибка SW:", err));
+}
+
+
 // === 1. Отрисовка товаров в каталоге ===
 function renderProducts(filterType = 'default') {
     const container = document.getElementById('products-container');
@@ -226,4 +233,5 @@ document.querySelectorAll('.filter-chip').forEach(btn => {
         // 4. Перерисовываем товары с учетом фильтра
         renderProducts(sortType);
     });
+
 });
