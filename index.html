@@ -91,6 +91,15 @@
         <div class="spacer"></div>
     </div>
 
+    <div id="floating-cart-banner" class="floating-banner hidden">
+        <div class="banner-qty" id="banner-qty">0</div>
+        <div class="banner-info">
+            <span class="banner-label">Сумма заказа</span>
+            <span class="banner-total" id="banner-total">0 ₸</span>
+        </div>
+        <button class="banner-checkout-btn" onclick="switchTab('cart')">Оформить</button>
+    </div>
+
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" id="tab-catalog" onclick="switchTab('catalog')">
             <i class="fas fa-home"></i>
