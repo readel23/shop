@@ -52,6 +52,8 @@ function loadProductsFromGoogle() {
             if (!document.getElementById('cart-view').classList.contains('hidden')) {
                 renderCartItems();
             }
+
+            updateCartIcon(); // Пересчитываем сумму для плашки, когда цены загрузились
         },
         error: function(err) {
             console.error("Ошибка загрузки CSV:", err);
@@ -191,7 +193,7 @@ function renderProducts() {
             <img src="${product.image}" alt="${product.name}" class="product-img" onerror="this.src='img/no-photo.png'">
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <p class="product-meta">Остаток: ${product.stock} ${product.unit}</p>
+                <p class="product-meta">Цена за ${product.unit}</p>
                 <div class="price-row">
                     <span class="price">${formatPrice(product.price)}</span>
                     ${qty === 0 ? `
@@ -236,18 +238,62 @@ function changeQty(id, change) {
     checkOrderButton();
 }
 
+// Функция для полного удаления товара из корзины
+function removeFromCart(id) {
+    // Удаляем товар из объекта корзины
+    delete cart[id]; 
+    
+    // Сохраняем изменения и обновляем интерфейс
+    saveCart();
+    renderCartItems(); 
+    updateCartIcon();
+    checkOrderButton();
+}
+
 function saveCart() { localStorage.setItem('shopCart', JSON.stringify(cart)); }
 function loadCartFromStorage() { const saved = localStorage.getItem('shopCart'); if (saved) cart = JSON.parse(saved); }
 
 function updateCartIcon() {
     const badge = document.getElementById('cart-badge');
+    const floatingBanner = document.getElementById('floating-cart-banner');
+    const bannerQty = document.getElementById('banner-qty');
+    const bannerTotal = document.getElementById('banner-total');
+
     let totalQty = 0;
-    Object.values(cart).forEach(qty => totalQty += qty);
+    let totalPrice = 0;
+
+    // Считаем общее количество и сумму
+    for (const [id, qty] of Object.entries(cart)) {
+        totalQty += qty;
+        // Находим товар, чтобы узнать его цену
+        const product = products.find(p => p.id == id);
+        if (product) {
+            totalPrice += product.price * qty;
+        }
+    }
+
+    // 1. Обновляем кружочек (бейджик) в нижнем меню
     if (totalQty > 0) {
         badge.classList.remove('hidden');
         badge.innerText = totalQty;
     } else {
         badge.classList.add('hidden');
+    }
+
+    // 2. Логика плавающей плашки
+    const catalogView = document.getElementById('catalog-view');
+    // Показываем плашку только если есть товары И мы находимся в каталоге
+    if (totalQty > 0 && catalogView && !catalogView.classList.contains('hidden')) {
+        if (floatingBanner) {
+            floatingBanner.classList.remove('hidden');
+            bannerQty.innerText = totalQty;
+            bannerTotal.innerText = formatPrice(totalPrice);
+        }
+    } else {
+        // Прячем, если корзина пуста или мы уже внутри корзины
+        if (floatingBanner) {
+            floatingBanner.classList.add('hidden');
+        }
     }
 }
 
@@ -273,6 +319,7 @@ function switchTab(tabName) {
         renderCartItems(); 
         checkOrderButton();
     }
+    updateCartIcon();
 }
 
 function renderCartItems() {
@@ -294,10 +341,15 @@ function renderCartItems() {
             item.innerHTML = `
                 <div class="cart-item-info">
                     <h4>${product.name}</h4>
-                    <p>${formatPrice(product.price)} / шт.</p>
+                    <p>${formatPrice(product.price)} / ${product.unit}</p>
                 </div>
                 <div class="cart-right">
-                    <span class="cart-item-total">${formatPrice(itemSum)}</span>
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 8px;">
+                        <span class="cart-item-total">${formatPrice(itemSum)}</span>
+                        <button class="remove-item-btn" onclick="removeFromCart('${product.id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                     <div class="quantity-controls" style="display: flex;">
                         <button class="qty-btn" onclick="changeQty('${product.id}', -1)">-</button>
                         <span class="qty-val">${qty}</span>
